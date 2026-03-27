@@ -11,6 +11,8 @@ window.title("Dream Journal")
 # 4. Set the starting size of the window (Width x Height)
 window.geometry("500x500")
 
+############## DREAM FUNCTIONS #####################
+
 def save_dream():
     dream_text = journal_input.get("1.0", tk.END)
 
@@ -26,6 +28,22 @@ def save_dream():
             final_text = scrambled_bytes.decode("utf-8")
         file.write(final_text + "\n---\n")
 
+def read_dreams():
+    with open("dream.txt", "r") as file:
+        # Read the whole file and split it into a list everywhere it sees your separator
+        all_dreams = file.read().split("\n---\n")
+        for chunk in all_dreams:
+            if chunk !="":
+                raw_bytes = chunk.encode("utf-8")
+                decoded_bytes = base64.b64decode(raw_bytes)
+                readable_text = decoded_bytes.decode("utf-8")
+                print(readable_text)
+                print("-------------------")
+
+#####################################################
+
+
+################## USER INTERFACE ###################
 
 #text box
 journal_input = tk.Text(window)
@@ -39,6 +57,12 @@ lucid_check.pack()
 #save button
 save_button = tk.Button(window, text="Save Dream", command=save_dream)
 save_button.pack()
+
+#read button
+read_button = tk.Button(window, text="Read Past Dreams", command=read_dreams)
+read_button.pack()
+
+######################################################
 
 # 5. Tell the window to stay open in an infinite loop and wait for the user
 window.mainloop()
