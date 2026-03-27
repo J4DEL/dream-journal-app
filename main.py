@@ -8,7 +8,7 @@ window = tk.Tk()
 window.title("Dream Journal")
 
 # 4. Set the starting size of the window (Width x Height)
-window.geometry("500x400")
+window.geometry("500x500")
 
 def save_dream():
     dream_text = journal_input.get("1.0", tk.END)
@@ -17,11 +17,21 @@ def save_dream():
     journal_input.delete("1.0",  tk.END)
 
     with open("dream.txt", "a") as file:
+        if is_lucid.get():
+            dream_text += "\n[TAG:LUCID]"
+            is_lucid.set(False)
         file.write(dream_text + "\n---\n")
+
 
 #text box
 journal_input = tk.Text(window)
 journal_input.pack()
+
+#lucid dream check box
+is_lucid = tk.BooleanVar()
+lucid_check = tk.Checkbutton(window, text="Lucid Dream?", variable=is_lucid)
+lucid_check.pack()
+
 #save button
 save_button = tk.Button(window, text="Save Dream", command=save_dream)
 save_button.pack()
