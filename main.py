@@ -29,6 +29,7 @@ def save_dream():
         file.write(final_text + "\n---\n")
 
 def read_dreams():
+    full_history = ""
     with open("dream.txt", "r") as file:
         # Read the whole file and split it into a list everywhere it sees your separator
         all_dreams = file.read().split("\n---\n")
@@ -37,14 +38,20 @@ def read_dreams():
                 raw_bytes = chunk.encode("utf-8")
                 decoded_bytes = base64.b64decode(raw_bytes)
                 readable_text = decoded_bytes.decode("utf-8")
-                print(readable_text)
-                print("-------------------")
+                full_history += readable_text + "\n--------------------\n"
+# Create the pop-up
+    view_window = tk.Toplevel(window)
+    view_window.title("Past Dreams Vault")
+    view_window.geometry("500x500")
+    display_box = tk.Text(view_window)
+    display_box.insert("1.0", full_history)
+    display_box.pack()
 
 #####################################################
 
 
 ################## USER INTERFACE ###################
-
+######## MAIN WINDOW ########
 #text box
 journal_input = tk.Text(window)
 journal_input.pack()
@@ -61,7 +68,7 @@ save_button.pack()
 #read button
 read_button = tk.Button(window, text="Read Past Dreams", command=read_dreams)
 read_button.pack()
-
+#############################
 ######################################################
 
 # 5. Tell the window to stay open in an infinite loop and wait for the user
