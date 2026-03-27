@@ -1,5 +1,6 @@
 # 1. Bring the Tkinter toolbox into our file and give it a short nickname 'tk'
 import tkinter as tk
+import base64
 
 # 2. Create the main, blank window (this is the foundation of the app)
 window = tk.Tk()
@@ -20,7 +21,10 @@ def save_dream():
         if is_lucid.get():
             dream_text += "\n[#LUCID]"
             is_lucid.set(False)
-        file.write(dream_text + "\n---\n")
+            text_bytes = dream_text.encode("utf-8")
+            scrambled_bytes = base64.b64encode(text_bytes)
+            final_text = scrambled_bytes.decode("utf-8")
+        file.write(final_text + "\n---\n")
 
 
 #text box
