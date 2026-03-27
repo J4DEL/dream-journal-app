@@ -18,7 +18,7 @@ def save_dream():
 
     with open("dream.txt", "a") as file:
         if is_lucid.get():
-            dream_text += "\n[TAG:LUCID]"
+            dream_text += "\n[#LUCID]"
             is_lucid.set(False)
         file.write(dream_text + "\n---\n")
 
