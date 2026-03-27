@@ -14,6 +14,7 @@ def save_dream():
     dream_text = journal_input.get("1.0", tk.END)
 
     print("Dream entry successful.")
+    journal_input.delete("1.0",  tk.END)
 
     with open("dream.txt", "a") as file:
         file.write(dream_text + "\n---\n")
