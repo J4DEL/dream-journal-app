@@ -1,7 +1,14 @@
 # 1. Bring the Tkinter toolbox into our file and give it a short nickname 'tk'
 import tkinter as tk
-import base64
+from tkinter import simpledialog, messagebox
 import pandas as pd
+from cryptography.fernet import Fernet
+# Load the master key
+with open(".secret.key", "rb") as key_file:
+    master_key = key_file.read()
+
+# Create the cipher tool using that key
+cipher_suite = Fernet(master_key)
 
 # 2. Create the main, blank window (this is the foundation of the app)
 window = tk.Tk()
@@ -25,12 +32,20 @@ def save_dream():
             is_lucid.set(False)
 
         text_bytes = dream_text.encode("utf-8")
-        scrambled_bytes = base64.b64encode(text_bytes)
+        scrambled_bytes = cipher_suite.encrypt(text_bytes)
         final_text = scrambled_bytes.decode("utf-8")
         file.write(final_text + "\n---\n")
 
 def read_dreams():
     global view_window
+    # 1. Ask for the password (the show="*" hides the text as they type)
+    user_guess = simpledialog.askstring("Security Check", "Enter Master PIN to unlock:", show="*")
+
+    # 2. Check the password
+    if user_guess != "Alcoholic":
+        messagebox.showerror("Access Denied", "Intruder alert. Incorrect PIN.")
+        return  # This completely stops the function and kicks them out
+
     full_history = ""
     dream_data = []
     with open("dream.txt", "r") as file:
@@ -39,7 +54,7 @@ def read_dreams():
         for chunk in all_dreams:
             if chunk !="":
                 raw_bytes = chunk.encode("utf-8")
-                decoded_bytes = base64.b64decode(raw_bytes)
+                decoded_bytes = cipher_suite.decrypt(raw_bytes)
                 readable_text = decoded_bytes.decode("utf-8")
                 full_history += readable_text + "\n--------------------\n"
                 was_lucid = "[#LUCID]" in readable_text
