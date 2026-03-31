@@ -42,7 +42,7 @@ def read_dreams():
     user_guess = simpledialog.askstring("Security Check", "Enter Master PIN to unlock:", show="*")
 
     # 2. Check the password
-    if user_guess != "Alcoholic":
+    if user_guess != "2026":
         messagebox.showerror("Access Denied", "Intruder alert. Incorrect PIN.")
         return  # This completely stops the function and kicks them out
 
